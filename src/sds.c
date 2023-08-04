@@ -50,19 +50,26 @@ static void sdsOomAbort(void) {
 
 sds sdsnewlen(const void *init, size_t initlen) {
     struct sdshdr *sh;
-
+    /* 
+		Allocating memory for len and free fieds as well as for the buf character array.
+		The last 1 space is for the ending character '\0' in C programming language.
+    */
     sh = zmalloc(sizeof(struct sdshdr)+initlen+1);
+    // Dealling with OOM case.
 #ifdef SDS_ABORT_ON_OOM
     if (sh == NULL) sdsOomAbort();
 #else
     if (sh == NULL) return NULL;
 #endif
+
     sh->len = initlen;
     sh->free = 0;
+    // buf field initialization.
     if (initlen) {
         if (init) memcpy(sh->buf, init, initlen);
         else memset(sh->buf,0,initlen);
     }
+    // Ending  character '\0' in C programming language.
     sh->buf[initlen] = '\0';
     return (char*)sh->buf;
 }

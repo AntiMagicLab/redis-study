@@ -34,6 +34,7 @@
 #include <sys/types.h>
 #include <stdarg.h>
 
+/* sds是一个char的指针 */
 typedef char *sds;
 
 struct sdshdr {
